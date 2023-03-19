@@ -11,6 +11,13 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+const workoutIcon = L.icon({
+  iconUrl: 'images/marker/workout.gif',
+  iconSize: [50, 50],
+  iconAnchor: [22, 94],
+  popupAnchor: [-3, -76],
+});
+
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     function (position) {
@@ -32,7 +39,20 @@ if (navigator.geolocation) {
       map.on('click', function (mapEvent) {
         const { lat, lng } = mapEvent.latlng;
 
-        L.marker([lat, lng]).addTo(map).bindPopup('Workout').openPopup();
+        L.marker([lat, lng], { icon: workoutIcon })
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 250,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+              interactive: true,
+            })
+          )
+          .setPopupContent('Workout')
+          .openPopup();
       });
     },
     function () {
